@@ -79,7 +79,7 @@ def load_models():
         return None, None, None, f"Model file(s) not found: {missing}. Place trained weights in the project root to enable RNN/NCF scoring."
 
     try:
-        metadata = torch.load(meta_path, map_location="cpu")
+        metadata = torch.load(meta_path, map_location="cpu", weights_only=False)
         rnn_model = ContextRNN(
             num_songs=metadata["num_songs"],
             num_genres=metadata["num_genres"],
@@ -91,8 +91,8 @@ def load_models():
             num_genres=metadata["num_genres"],
             num_vibes=metadata["num_vibes"],
         )
-        rnn_model.load_state_dict(torch.load(rnn_path, map_location="cpu"), strict=True)
-        ncf_model.load_state_dict(torch.load(ncf_path, map_location="cpu"), strict=True)
+        rnn_model.load_state_dict(torch.load(rnn_path, map_location="cpu", weights_only=False), strict=True)
+        ncf_model.load_state_dict(torch.load(ncf_path, map_location="cpu", weights_only=False), strict=True)
         rnn_model.eval()
         ncf_model.eval()
         return metadata, rnn_model, ncf_model, None
